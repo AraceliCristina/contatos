@@ -4,6 +4,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContatosController;
 use App\Http\Controllers\LivrosController;
+use App\Http\Controllers\EmprestimosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +27,6 @@ Route::resource('contatos',ContatosController::class);
 
 Route::get('livros/buscar',[LivrosController::class,'buscar']);
 Route::resource('livros',LivrosController::class);
+
+Route::get('emprestimos/buscar',[EmprestimosController::class,'buscar']);
+Route::resource('emprestimos',EmprestimosController::class);
