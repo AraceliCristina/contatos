@@ -15,7 +15,7 @@
             <div class="col-sm-9">
                 <div class="input-group ml-5">
                     @if($busca !== null)
-                        &nbsp;<a class="btn btn-info" href="{{url('emprestimo/')}}">Todos</a>&nbsp;
+                        &nbsp;<a class="btn btn-info" href="{{url('emprestimos/')}}">Todos</a>&nbsp;
                     @endif
                     {{Form::text('busca',$busca,['class'=>'form-control','required','placeholder'=>'buscar'])}}
                     &nbsp;
@@ -31,14 +31,16 @@
         @foreach ($emprestimos as $emprestimo)
             <tr>
                 <td>
-                    <a href="{{url('emprestimo/'.$emprestimo->id)}}">{{$emprestimo->id}}</a>
+                    <a href="{{url('emprestimos/'.$emprestimo->id)}}">{{$emprestimo->id}}</a>
 
                 </td>
                 <td>
-                    {{$emprestimo->contato_id}}
+                    {{$emprestimo->contato_id}} - 
+                    {{$emprestimo->contato->nome}}
                 </td>
                 <td>
-                    {{$emprestimo->livro_id}}
+                    {{$emprestimo->livro_id}} - 
+                    {{$emprestimo->livro->titulo}}
                 </td>
                 <td>
                     {{$emprestimo->datahora}}
