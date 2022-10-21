@@ -23,6 +23,10 @@ class Emprestimo extends Model
         return $this->belongsTo(Livro::class);
         
     }
+    public function busca() {
+
+    }
+    
     public function getDevolvidoAttribute() {
         // Usando assessador
         $prazodevolucao = \Carbon\Carbon::create($this->datahora)->addDays

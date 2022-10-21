@@ -28,5 +28,5 @@ Route::get('livros/buscar',[LivrosController::class,'buscar']);
 Route::resource('livros',LivrosController::class);
 
 Route::get('emprestimos/buscar',[EmprestimosController::class,'buscar']);
-Route::get('emprestimos/{id}devolver',[EmprestimosController::class,'devolver']);
+Route::put('emprestimos/{emprestimo}/devolver',[EmprestimosController::class,'devolver'])->name('emprestimos.devolver');
 Route::resource('emprestimos',EmprestimosController::class);

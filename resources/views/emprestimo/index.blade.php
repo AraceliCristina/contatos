@@ -52,9 +52,6 @@
                     {{$emprestimo->livro->titulo}}
                 </td>
                 <td>
-                    {{$emprestimo->livro_id}} - {{$emprestimo->livro->titulo}}
-                </td>
-                <td>
                     {{\Carbon\Carbon::create($emprestimo->datahora)->format('d/m/Y H:i:s')}}
                 </td>
                 <td>{!!$emprestimo->devolvido!!}</td>
