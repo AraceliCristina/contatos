@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\Emprestimo;
 use App\Models\Contato;
 use App\Models\Livro;
@@ -18,8 +19,12 @@ class EmprestimosController extends Controller
      */
     public function index()
     {
-        $emprestimos = Emprestimo::simplepaginate(5);
-        return view('emprestimo.index',array('emprestimos' => $emprestimos,'busca'=>null));
+        if (Auth::check()) {
+            $emprestimos = Emprestimo::simplepaginate(5);
+            return view('emprestimo.index',array('emprestimos' => $emprestimos,'busca'=>null));
+        } else {
+            return redirect('login');
+        }
     }
 
     /**
@@ -47,9 +52,13 @@ class EmprestimosController extends Controller
      */
     public function create()
     {
-        $contatos = Contato::all();
-        $livros = Livro::all();
-        return view('emprestimo.create',['contatos'=>$contatos,'livros'=>$livros]);
+        if (Auth::check()) {
+            $contatos = Contato::all();
+            $livros = Livro::all();
+            return view('emprestimo.create',['contatos'=>$contatos,'livros'=>$livros]);
+        } else {
+            return redirect('login');
+        }
     }
 
     /**
@@ -60,20 +69,24 @@ class EmprestimosController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'contato_id' => 'required',
-            'livro_id' => 'required',
-            'datahora' => 'required'
-        ]);
-        $emprestimo = new Emprestimo();
-        $emprestimo->contato_id = $request->input('contato_id');
-        $emprestimo->livro_id = $request->input('livro_id');
-        $emprestimo->datahora = \Carbon\Carbon::createFromFormat('d/m/Y H:i:s', $request->input('datahora'));
-        $emprestimo->obs = $request->input('obs');
-        $emprestimo->datadevolucao = null;
+        if (Auth::check()) {
+            $this->validate($request,[
+                'contato_id' => 'required',
+                'livro_id' => 'required',
+                'datahora' => 'required'
+            ]);
+            $emprestimo = new Emprestimo();
+            $emprestimo->contato_id = $request->input('contato_id');
+            $emprestimo->livro_id = $request->input('livro_id');
+            $emprestimo->datahora = \Carbon\Carbon::createFromFormat('d/m/Y H:i:s', $request->input('datahora'));
+            $emprestimo->obs = $request->input('obs');
+            $emprestimo->datadevolucao = null;
 
-        if($emprestimo->save()) {
-            return redirect('emprestimos');
+            if($emprestimo->save()) {
+                return redirect('emprestimos');
+            }
+        } else {
+            return redirect('login');
         }
     }
 
@@ -111,13 +124,17 @@ class EmprestimosController extends Controller
      */
     public function devolver(Request $request, $id)
     {
-        $emprestimo = Emprestimo::find($id);
-        $emprestimo->datadevolucao = \Carbon\Carbon::now();
-        $emprestimo->save();
+        if (Auth::check()) {
+            $emprestimo = Emprestimo::find($id);
+            $emprestimo->datadevolucao = \Carbon\Carbon::now();
+            $emprestimo->save();
 
-        if($emprestimo->save()) {
-            Session::flash('mensagem','Empréstimo Devolvido');
-            return redirect()->back();
+            if($emprestimo->save()) {
+                Session::flash('mensagem','Empréstimo Devolvido');
+                return redirect()->back();
+            }
+        } else {
+            return redirect('login');
         }
     }
 
@@ -141,10 +158,14 @@ class EmprestimosController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $emprestimo = Emprestimo::find($id);
+        if (Auth::check()) {
+            $emprestimo = Emprestimo::find($id);
 
-        $emprestimo->delete();
-        Session::flash('mensagem','Empréstimo Excluído com Sucesso');
-        return redirect(url('emprestimos/'));
+            $emprestimo->delete();
+            Session::flash('mensagem','Empréstimo Excluído com Sucesso');
+            return redirect(url('emprestimos/'));
+        } else {
+            return redirect('login');
+        }
     }
 }

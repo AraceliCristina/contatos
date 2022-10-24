@@ -1,5 +1,5 @@
 
-@extends('layout.app')
+@extends('layouts.app')
 @section('title','Criar novo Contato')
 @section('content')
     <h1>Criar novo Contato</h1>
