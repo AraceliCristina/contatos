@@ -23,6 +23,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $numLivros= Livro::all()->count();
+        $numLivros= Contato::all()->count();
+        $numLivros= Emprestimo::all()->count();
+        return view('home',array ['numLivros'=>$numLivros,'numContatos'=>$numContatos,'numEmprestimos'=>$numEmprestimos]);
     }
 }

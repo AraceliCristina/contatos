@@ -19,12 +19,10 @@ class EmprestimosController extends Controller
      */
     public function index()
     {
-        if (Auth::check()) {
+     
             $emprestimos = Emprestimo::simplepaginate(5);
             return view('emprestimo.index',array('emprestimos' => $emprestimos,'busca'=>null));
-        } else {
             return redirect('login');
-        }
     }
 
     /**
@@ -52,7 +50,7 @@ class EmprestimosController extends Controller
      */
     public function create()
     {
-        if (Auth::check()) {
+        if ((Auth::check()) && (Auth::user()->isAdmin())) {
             $contatos = Contato::all();
             $livros = Livro::all();
             return view('emprestimo.create',['contatos'=>$contatos,'livros'=>$livros]);
@@ -69,7 +67,7 @@ class EmprestimosController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::check()) {
+        if ((Auth::check()) && (Auth::user()->isAdmin())) {
             $this->validate($request,[
                 'contato_id' => 'required',
                 'livro_id' => 'required',
@@ -124,7 +122,7 @@ class EmprestimosController extends Controller
      */
     public function devolver(Request $request, $id)
     {
-        if (Auth::check()) {
+        if ((Auth::check()) && (Auth::user()->isAdmin())){
             $emprestimo = Emprestimo::find($id);
             $emprestimo->datadevolucao = \Carbon\Carbon::now();
             $emprestimo->save();
@@ -158,7 +156,7 @@ class EmprestimosController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        if (Auth::check()) {
+        if ((Auth::check()) && (Auth::user()->isAdmin())){
             $emprestimo = Emprestimo::find($id);
 
             $emprestimo->delete();
