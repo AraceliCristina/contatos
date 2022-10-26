@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Emprestimo;
+use App\Models\Contato;
+use App\Models\Livro;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -13,7 +16,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -24,8 +27,9 @@ class HomeController extends Controller
     public function index()
     {
         $numLivros= Livro::all()->count();
-        $numLivros= Contato::all()->count();
-        $numLivros= Emprestimo::all()->count();
-        return view('home',array ['numLivros'=>$numLivros,'numContatos'=>$numContatos,'numEmprestimos'=>$numEmprestimos]);
+        $numContatos= Contato::all()->count();
+        $numEmprestimos= Emprestimo::all()->count();
+        $emprestimosadevolver = Emprestimo::where('datadevolucao','=',NULL)->get();
+        return view('home',array('numLivros'=>$numLivros,'numContatos'=>$numContatos,'numEmprestimos'=>$numEmprestimos,'emprestimosadevolver'=>$emprestimosadevolver));
     }
 }
